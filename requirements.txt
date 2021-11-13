@@ -1,0 +1,11 @@
+uvicorn~=0.15.0
+fastapi~=0.70.0
+python-dotenv~=0.19.1
+cryptography~=35.0.0
+pydantic~=1.8.2
+aiohttp[speedups]~=3.8.0
+typer[all]~=0.4.0
+aioredis~=2.0.0
+tortoise-orm[asyncpg]
+aerich~=0.5.8
+starlette~=0.16.0
