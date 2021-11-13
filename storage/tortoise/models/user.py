@@ -47,6 +47,7 @@ class WechatUserToken(Model):
 
 
 class WechatUserProfile(Model):
-    owner: fields.ForeignKeyRelation[WechatUser] = fields.ForeignKeyField('models.WechatUser', 'profile', pk=True)
-    nickname = fields.CharField(max_length=256, description="User's nickname")
-    avatar = fields.CharField(max_length=512, description="URL of user's avatar")
+    owner: fields.ForeignKeyRelation[WechatUser] = fields.ForeignKeyField('models.WechatUser', 'profile')
+    nickname = fields.CharField(max_length=256, description="User's nickname", default="")
+    avatar = fields.CharField(max_length=512, description="URL of user's avatar",
+                              default="https://cdn.jsdelivr.net/gh/DarcJC/pictures-host/imgs/20211114021713.png")
