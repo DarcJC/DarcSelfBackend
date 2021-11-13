@@ -14,4 +14,6 @@ async def setup_tortoise():
 
 RollingSchema = pydantic_model_creator(Rolling)
 Tortoise.init_models(["storage.tortoise.models"], "models")
-WechatUserSchema = pydantic_model_creator(WechatUser, exclude=('tokens',), allow_cycles=False)
+WechatUserSchema = pydantic_model_creator(
+    WechatUser, exclude=('tokens', 'joined_rolls', 'owned_rolls', 'session_key', 'openid'), allow_cycles=False
+)
