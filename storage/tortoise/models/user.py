@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 
 from tortoise import fields, Model
 
+from storage.tortoise.models.roll import Rolling
+
 
 class WechatUser(Model):
     id = fields.IntField(pk=True, description="Internal User ID")
@@ -17,6 +19,10 @@ class WechatUser(Model):
     admin = fields.BooleanField(default=False, description="Is this user admin")
     created_at = fields.DatetimeField(auto_now_add=True)
     modified_at = fields.DatetimeField(auto_now=True)
+
+    owned_rolls: fields.ReverseRelation['Rolling']
+    joined_rolls: fields.ReverseRelation['Rolling']
+    profile: fields.ReverseRelation['WechatUserProfile']
 
     async def new_token(self) -> 'WechatUserToken':
         token = ''.join(random.choices(string.hexdigits, k=128))
@@ -38,3 +44,9 @@ class WechatUserToken(Model):
     @property
     def is_vaild(self) -> bool:
         return self.status and datetime.now(self.created_at.tzinfo) - self.created_at < timedelta(days=1)
+
+
+class WechatUserProfile(Model):
+    owner: fields.ForeignKeyRelation[WechatUser] = fields.ForeignKeyField('models.WechatUser', 'profile', pk=True)
+    nickname = fields.CharField(max_length=256, description="User's nickname")
+    avatar = fields.CharField(max_length=512, description="URL of user's avatar")
