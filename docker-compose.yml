@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    container_name: darcself-postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data:rw
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - darc
+    restart: unless-stopped
+  redis:
+    image: redis
+    container_name: darcself-redis
+    networks:
+      - darc
+    volumes:
+      - redis_data:/data:rw
+    restart: unless-stopped
+  backend:
+    image: darcjc/darcself-backend:latest
+    ports:
+      - "5000:${PIGEON_PORT:-5000}"
+    networks:
+      - darc
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - WECHAT_APPID
+      - WECHAT_SECRET
+      - "POSTGRES_DSN=postgres://postgres:postgres@postgres:5432/postgres"
+    entrypoint: [ "python", "main.py", "start", "--host", "${PIGEON_HOST:-0.0.0.0}", "--port", "${PIGEON_PORT:-5000}"]
+    restart: unless-stopped
+
+networks:
+  darc:
+
+volumes:
+  db_data:
+    name: darcself-db-data
+  redis_data:
+    name: darcself-redis-data

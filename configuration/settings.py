@@ -4,6 +4,7 @@ from pydantic import constr, RedisDsn, BaseSettings, PostgresDsn, AnyUrl
 
 
 class Settings(BaseSettings):
+    DEBUG: Optional[bool] = False
     ADMIN_SECRET: Optional[constr(min_length=128)]
     REDIS_DSN: Optional[RedisDsn] = 'redis://localhost:6379/0'
     WECHAT_APPID: str
