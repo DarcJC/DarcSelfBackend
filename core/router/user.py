@@ -4,7 +4,7 @@ from starlette.responses import Response
 
 from core.controller import user
 from core.dependency.oauth import get_current_user
-from storage.tortoise.models import WechatUser
+from storage.tortoise.models import WechatUser, WechatUserRealname
 
 router = APIRouter(tags=['User'], prefix='/user')
 
@@ -38,4 +38,15 @@ async def wechat_update_profile(
         current_user: WechatUser = Depends(get_current_user),
 ):
     await user.wechat_profile_update(current_user, data.nickname, data.avatar_url)
+    return Response(status_code=204)
+
+
+@router.patch(
+    '/wechat/realname',
+    description="Updating realname",
+    status_code=204,
+)
+async def wechat_set_realname(
+        res: WechatUserRealname = Depends(user.set_realname),
+):
     return Response(status_code=204)

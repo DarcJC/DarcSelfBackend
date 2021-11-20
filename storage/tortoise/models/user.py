@@ -23,6 +23,7 @@ class WechatUser(Model):
     owned_rolls: fields.ReverseRelation['Rolling']
     joined_rolls: fields.ReverseRelation['Rolling']
     profile: fields.ReverseRelation['WechatUserProfile']
+    realname: fields.ReverseRelation['WechatUserRealname']
 
     async def new_token(self) -> 'WechatUserToken':
         token = ''.join(random.choices(string.hexdigits, k=128))
@@ -47,10 +48,15 @@ class WechatUserToken(Model):
 
 
 class WechatUserProfile(Model):
-    owner: fields.ForeignKeyRelation[WechatUser] = fields.ForeignKeyField('models.WechatUser', 'profile')
+    owner: fields.OneToOneRelation[WechatUser] = fields.OneToOneField('models.WechatUser', 'profile')
     nickname = fields.CharField(max_length=256, description="User's nickname", default="")
     avatar = fields.CharField(max_length=512, description="URL of user's avatar",
                               default="https://cdn.jsdelivr.net/gh/DarcJC/pictures-host/imgs/20211114021713.png")
+
+
+class WechatUserRealname(Model):
+    owner: fields.OneToOneRelation[WechatUser] = fields.OneToOneField('models.WechatUser', 'realname')
+    name = fields.CharField(max_length=16)
 
 
 class SceneData(Model):

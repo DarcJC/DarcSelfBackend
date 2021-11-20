@@ -6,7 +6,8 @@ from fastapi import HTTPException, Depends
 from pydantic import HttpUrl, constr, conint
 
 from core.controller.wechat import code2session, get_wxa_code_unlimited
-from storage.tortoise.models.user import WechatUser, WechatUserProfile, SceneData
+from core.dependency.oauth import get_current_user
+from storage.tortoise.models.user import WechatUser, WechatUserProfile, SceneData, WechatUserRealname
 
 
 async def wechat_login(code: str) -> str:
@@ -37,3 +38,11 @@ async def create_wxa_code_unlimited(
     image: bytes = await get_wxa_code_unlimited(key, page, env_version, width, is_hyaline)
     await SceneData.create(key=key, value=data)
     return image
+
+
+async def set_realname(name: constr(max_length=16, min_length=1), user: WechatUser = Depends(get_current_user)) \
+        -> WechatUserRealname:
+    inst, _ = await WechatUserRealname.get_or_create(owner=user)
+    inst.name = name
+    await inst.save()
+    return inst
