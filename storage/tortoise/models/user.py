@@ -51,3 +51,9 @@ class WechatUserProfile(Model):
     nickname = fields.CharField(max_length=256, description="User's nickname", default="")
     avatar = fields.CharField(max_length=512, description="URL of user's avatar",
                               default="https://cdn.jsdelivr.net/gh/DarcJC/pictures-host/imgs/20211114021713.png")
+
+
+class SceneData(Model):
+    id = fields.BigIntField(pk=True, description="Internal ID")
+    key = fields.CharField(max_length=32, description="Key")
+    value = fields.CharField(max_length=512, description="Value")
