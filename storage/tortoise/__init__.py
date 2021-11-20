@@ -2,7 +2,7 @@ from tortoise import Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 from configuration import setting
-from storage.tortoise.models import Rolling, WechatUser
+from storage.tortoise.models import Rolling, WechatUser, SceneData
 
 
 async def setup_tortoise():
@@ -13,6 +13,7 @@ async def setup_tortoise():
     await Tortoise.generate_schemas()
 
 RollingSchema = pydantic_model_creator(Rolling)
+SceneDataSchema = pydantic_model_creator(SceneData, exclude=('id', ))
 Tortoise.init_models(["storage.tortoise.models"], "models")
 WechatUserSchema = pydantic_model_creator(
     WechatUser, exclude=('tokens', 'joined_rolls', 'owned_rolls', 'session_key', 'openid'), allow_cycles=False
