@@ -28,7 +28,7 @@ class WechatProfileUpdateRequest(BaseModel):
     avatar_url: HttpUrl
 
 
-@router.patch(
+@router.put(
     '/wechat/profile',
     description="Updating profile",
     status_code=204,
@@ -41,7 +41,7 @@ async def wechat_update_profile(
     return Response(status_code=204)
 
 
-@router.patch(
+@router.put(
     '/wechat/realname',
     description="Updating realname",
     status_code=204,
