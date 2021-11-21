@@ -56,7 +56,7 @@ class WechatUserProfile(Model):
 
 class WechatUserRealname(Model):
     owner: fields.OneToOneRelation[WechatUser] = fields.OneToOneField('models.WechatUser', 'realname')
-    name = fields.CharField(max_length=16)
+    name = fields.CharField(max_length=16, default="")
 
 
 class SceneData(Model):

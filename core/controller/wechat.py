@@ -79,4 +79,4 @@ async def get_wxa_code_unlimited(
     async with aiohttp.request('POST', 'https://api.weixin.qq.com/wxa/getwxacodeunlimit', params=params, json=data) as resp:
         if "image" in resp.content_type:
             return await resp.read()
-        raise HTTPException(status_code=500, detail=resp.json())
+        raise HTTPException(status_code=500, detail=await resp.json())
